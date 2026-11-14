@@ -318,7 +318,7 @@
                 <p id="header-subtitle">124 Questions • 4 Lecture Sections</p>
             </div>
             <div class="score-badge" id="score-counter">
-                Grade: 0%
+                Grade: 100%
             </div>
         </div>
     </header>
@@ -2013,24 +2013,30 @@
     }
 
     function updateScore() {
-        let submittedCount = 0;
-        let totalScore = 0;
+        const totalQuestions = activeQuestions.length;
+        if(totalQuestions === 0) {
+            document.getElementById('score-counter').textContent = `Grade: 100%`;
+            return;
+        }
 
-        userState.forEach(state => {
-            if (state.submitted) {
+        // Calculate points lost just for the active set
+        let activePointsLost = 0;
+        let submittedCount = 0;
+        
+        activeQuestions.forEach(q => {
+            const state = userState.get(q.qid);
+            if(state && state.submitted) {
                 submittedCount++;
-                totalScore += state.score;
+                activePointsLost += (1 - state.score);
             }
         });
 
-        // NEW LOGIC: Always calculate grade out of the total number of questions currently filtered.
-        const grade = activeQuestions.length > 0
-            ? Math.round((totalScore / activeQuestions.length) * 100)
-            : 0;
-
+        // Starts at 100% and subtracts proportional value of missed questions
+        let currentGrade = Math.max(0, Math.round(((totalQuestions - activePointsLost) / totalQuestions) * 100));
+        
         const scoreElem = document.getElementById('score-counter');
-        scoreElem.textContent = `Grade: ${grade}%`;
-        scoreElem.title = `Answered ${submittedCount} / ${activeQuestions.length}`;
+        scoreElem.textContent = `Grade: ${currentGrade}%`;
+        scoreElem.title = `Answered ${submittedCount} / ${totalQuestions}`;
     }
 
     function renderQuestions() {
