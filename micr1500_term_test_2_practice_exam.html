@@ -2016,7 +2016,21 @@
         let submittedCount = 0;
         let totalScore = 0;
 
-        userState.forEach(
+        userState.forEach(state => {
+            if (state.submitted) {
+                submittedCount++;
+                totalScore += state.score;
+            }
+        });
+
+        // NEW LOGIC: Always calculate grade out of the total number of questions currently filtered.
+        const grade = activeQuestions.length > 0
+            ? Math.round((totalScore / activeQuestions.length) * 100)
+            : 0;
+
+        const scoreElem = document.getElementById('score-counter');
+        scoreElem.textContent = `Grade: ${grade}%`;
+        scoreElem.title = `Answered ${submittedCount} / ${activeQuestions.length}`;
     }
 
     function renderQuestions() {
