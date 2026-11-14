@@ -318,7 +318,7 @@
                 <p id="header-subtitle">100 Questions • 4 Lecture Sections + Malaria Reading</p>
             </div>
             <div class="score-badge" id="score-counter">
-                Grade: 100%
+                Grade: 0%
             </div>
         </div>
     </header>
@@ -2363,7 +2363,8 @@
         renderQuestions();
         updateScore();
     }
-      function updateScore() {
+
+    function updateScore() {
         let submittedCount = 0;
         let totalScore = 0;
 
@@ -2380,9 +2381,9 @@
 
         const scoreElem = document.getElementById('score-counter');
         scoreElem.textContent = `Grade: ${grade}%`;
-        scoreElem.title = `Answered ${submittedCount} / ${activeQuestions.length}`;
+        scoreElem.title = `Answered ${submittedCount} / ${questionBank.length}`;
     }
-      
+
     function renderQuestions() {
         const container = document.getElementById('questionsContainer');
         container.innerHTML = '';
