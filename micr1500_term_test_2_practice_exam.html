@@ -318,7 +318,7 @@
                 <p id="header-subtitle">124 Questions • 4 Lecture Sections</p>
             </div>
             <div class="score-badge" id="score-counter">
-                Grade: 100%
+                Grade: 0%
             </div>
         </div>
     </header>
@@ -2013,30 +2013,10 @@
     }
 
     function updateScore() {
-        const totalQuestions = activeQuestions.length;
-        if(totalQuestions === 0) {
-            document.getElementById('score-counter').textContent = `Grade: 100%`;
-            return;
-        }
-
-        // Calculate points lost just for the active set
-        let activePointsLost = 0;
         let submittedCount = 0;
-        
-        activeQuestions.forEach(q => {
-            const state = userState.get(q.qid);
-            if(state && state.submitted) {
-                submittedCount++;
-                activePointsLost += (1 - state.score);
-            }
-        });
+        let totalScore = 0;
 
-        // Starts at 100% and subtracts proportional value of missed questions
-        let currentGrade = Math.max(0, Math.round(((totalQuestions - activePointsLost) / totalQuestions) * 100));
-        
-        const scoreElem = document.getElementById('score-counter');
-        scoreElem.textContent = `Grade: ${currentGrade}%`;
-        scoreElem.title = `Answered ${submittedCount} / ${totalQuestions}`;
+        userState.forEach(
     }
 
     function renderQuestions() {
