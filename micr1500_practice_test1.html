@@ -2363,14 +2363,26 @@
         renderQuestions();
         updateScore();
     }
-
-  function updateScore() {
+      function updateScore() {
         let submittedCount = 0;
         let totalScore = 0;
 
-        userState.forEach(
-    }
+        userState.forEach(state => {
+            if (state.submitted) {
+                submittedCount++;
+                totalScore += state.score;
+            }
+        });
 
+        const grade = submittedCount > 0
+            ? Math.round((totalScore / submittedCount) * 100)
+            : 0;
+
+        const scoreElem = document.getElementById('score-counter');
+        scoreElem.textContent = `Grade: ${grade}%`;
+        scoreElem.title = `Answered ${submittedCount} / ${activeQuestions.length}`;
+    }
+      
     function renderQuestions() {
         const container = document.getElementById('questionsContainer');
         container.innerHTML = '';
